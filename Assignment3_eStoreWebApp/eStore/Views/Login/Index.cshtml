@@ -1,0 +1,11 @@
+﻿@using BusinessObject
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Login</h1>
+<form asp-controller="Login" method="POST">
+    <input id="UserName" name="UserName" value="" type="text" /><br />
+    <input id="Password" name="Password" value="" type="password" /><br />
+    <button type="submit" name="action" value="login" > Login </button>
+</form>
