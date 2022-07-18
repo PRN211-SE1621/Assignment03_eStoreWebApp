@@ -28,6 +28,12 @@ x86/
 bld/
 [Bb]in/
 [Oo]bj/
+Assignment3_eStoreWebApp/BusinessObject/[Bb]in/
+Assignment3_eStoreWebApp/BusinessObject/[Oo]bj/
+Assignment3_eStoreWebApp/DataAccess/[Bb]in/
+Assignment3_eStoreWebApp/DataAccess/[Oo]bj/
+Assignment3_eStoreWebApp/eStore/[Bb]in/
+Assignment3_eStoreWebApp/eStore/[Oo]bj/
 [Ll]og/
 [Ll]ogs/
 
