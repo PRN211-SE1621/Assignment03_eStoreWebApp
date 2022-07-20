@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
@@ -12,6 +14,7 @@ namespace BusinessObject
             Orders = new HashSet<Order>();
         }
 
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MemberId { get; set; }
         public string Email { get; set; }
         public string CompanyName { get; set; }

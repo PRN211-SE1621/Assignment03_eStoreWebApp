@@ -54,7 +54,7 @@ namespace eStore.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("MemberId,Email,CompanyName,City,Country,Password")] Member member)
+        public async Task<IActionResult> Create([Bind("Email,CompanyName,City,Country,Password")] Member member)
         {
             if (ModelState.IsValid)
             {
@@ -145,7 +145,7 @@ namespace eStore.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MemberExists(int id)
+        private bool MemberExists(int? id)
         {
             return _context.Members.Any(e => e.MemberId == id);
         }

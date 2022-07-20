@@ -54,7 +54,7 @@ namespace eStore.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,CategoryId,ProductName,Weight,UnitPrice,UnitsInStock")] Product product)
+        public async Task<IActionResult> Create([Bind("CategoryId,ProductName,Weight,UnitPrice,UnitsInStock")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -145,7 +145,7 @@ namespace eStore.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProductExists(int id)
+        private bool ProductExists(int? id)
         {
             return _context.Products.Any(e => e.ProductId == id);
         }
