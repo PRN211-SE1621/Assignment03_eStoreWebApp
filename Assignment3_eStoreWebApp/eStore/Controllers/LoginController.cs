@@ -3,6 +3,7 @@ using Microsoft.Extensions.Primitives;
 
 using DataAccess.Repository;
 using BusinessObject;
+using Microsoft.AspNetCore.Http;
 
 namespace eStore.Controllers
 {
@@ -12,6 +13,7 @@ namespace eStore.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            TempData["Role"] = HttpContext.Session.GetString("Role");
             return View();
         }
 
@@ -27,12 +29,26 @@ namespace eStore.Controllers
                 isSuccess = true;
             }
 
-            TempData["IsSuccess"] = isSuccess;
             if (isSuccess)
             {
+                HttpContext.Session.SetString("Role", "ADMIN");
+                TempData["Role"] = HttpContext.Session.GetString("Role");
                 return RedirectToAction("Index", "Home");
             }
+            else
+            {
+                //TODO: Handle user role
+                HttpContext.Session.SetString("Role", "");
+                TempData["Role"] = HttpContext.Session.GetString("Role");
+            }
 
+            return RedirectToAction("Index", "Login");
+        }
+
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
             return RedirectToAction("Index", "Login");
         }
     }

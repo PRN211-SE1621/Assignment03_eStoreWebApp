@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var role = TempData["Role"];
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -21,26 +25,44 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Product</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Members" asp-action="Index">Member</a>
-                        </li>
-
+                        @{
+                            if ((string)role == "ADMIN")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Product</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Members" asp-action="Index">Member</a>
+                                </li>
+                            }
+                        }
                     </ul>
                 </div>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1 justify-content-end">
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="">Hello xxxx,</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Index">Logout</a>
-                        </li>
-                    </ul>
-                </div>
+                @{
+                    if (!string.IsNullOrEmpty((string)role))
+                    {
+                        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                            <ul class="navbar-nav flex-grow-1 justify-content-end">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="">Hello xxxx,</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Logout">Logout</a>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                            <ul class="navbar-nav flex-grow-1 justify-content-end">
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Index">Login</a>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                }
             </div>
         </nav>
     </header>

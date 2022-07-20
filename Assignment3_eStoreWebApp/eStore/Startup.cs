@@ -27,6 +27,7 @@ namespace eStore
         {
             services.AddControllersWithViews();
             services.AddTransient<SalesManagementContext, SalesManagementContext>();
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +44,8 @@ namespace eStore
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseSession();
 
             app.UseAuthorization();
 

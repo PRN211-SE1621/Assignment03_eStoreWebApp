@@ -1,6 +1,7 @@
 ﻿@using BusinessObject
 @{
     ViewData["Title"] = "Index";
+    string role = (string)TempData["Role"];
 }
 
 <h1>Login</h1>
@@ -11,7 +12,7 @@
     <input id="Password" name="password" value="" type="password" /><br />
     <input type="submit" name="action" value="Login" class="btn btn-primary" />
     @{
-        if (TempData["IsSuccess"] != null && !(Boolean)TempData["IsSuccess"])
+        if (role != null && !role.Equals("ADMIN"))
         {
             <p style="color: red;">Login failed!</p>
         }
