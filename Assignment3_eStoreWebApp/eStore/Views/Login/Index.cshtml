@@ -4,8 +4,16 @@
 }
 
 <h1>Login</h1>
-<form asp-controller="Login" method="POST">
-    <input id="UserName" name="UserName" value="" type="text" /><br />
-    <input id="Password" name="Password" value="" type="password" /><br />
-    <button type="submit" name="action" value="login" > Login </button>
+<form asp-controller="Login" asp-action="Login" method="POST">
+    Username:
+    <input id="UserName" name="userName" value="" type="text" /><br />
+    Password:
+    <input id="Password" name="password" value="" type="password" /><br />
+    <input type="submit" name="action" value="Login" class="btn btn-primary" />
+    @{
+        if (TempData["IsSuccess"] != null && !(Boolean)TempData["IsSuccess"])
+        {
+            <p style="color: red;">Login failed!</p>
+        }
+    }
 </form>

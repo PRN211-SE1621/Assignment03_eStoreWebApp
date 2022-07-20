@@ -8,24 +8,32 @@ namespace eStore.Controllers
 {
     public class LoginController : Controller
     {
-        IMemberRepository memberRepository = new MemberRepository();   
+        IMemberRepository memberRepository = new MemberRepository();
         [HttpGet]
-        [HttpPost]
         public IActionResult Index()
         {
-            if(Request.Method == "POST")
-            {
-                Request.Form.TryGetValue("UserName", out StringValues userName);
-                Request.Form.TryGetValue("Password", out StringValues password);
-                string userNameInput = userName[0];
-                string passwordInput = password[0];
-                var member = memberRepository.CheckLogin(userNameInput, passwordInput);
-                if(member != null)
-                {
-                    ViewData["IsSuccess"] = "true";
-                }
-            }
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult Login(string userName, string password)
+        {
+            bool isSuccess = false;
+            string userNameInput = userName;
+            string passwordInput = password;
+
+            if (userNameInput == "admin@fstore.com" && passwordInput == "1")
+            {
+                isSuccess = true;
+            }
+
+            TempData["IsSuccess"] = isSuccess;
+            if (isSuccess)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return RedirectToAction("Index", "Login");
         }
     }
 }
