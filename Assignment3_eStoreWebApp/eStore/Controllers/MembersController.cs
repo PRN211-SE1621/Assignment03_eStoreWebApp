@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using DataAccess;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using BusinessObject.Common;
 
 namespace eStore.Controllers
 {
@@ -30,6 +33,15 @@ namespace eStore.Controllers
         {
             if (id == null)
             {
+                string session = HttpContext.Session.GetString("User");
+                if (session != null)
+                {
+                    Member user = JsonConvert.DeserializeObject<Member>(session);
+                    if (!Helper.CheckRole(user))
+                    {
+                        return View(user);
+                    }
+                }
                 return NotFound();
             }
 
@@ -109,6 +121,18 @@ namespace eStore.Controllers
                     else
                     {
                         throw;
+                    }
+                }
+                string session = HttpContext.Session.GetString("User");
+                if (session != null)
+                {
+                    Member user = JsonConvert.DeserializeObject<Member>(session);
+                    if (Helper.CheckRole(user)){
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        return RedirectToAction(nameof(Details));
                     }
                 }
                 return RedirectToAction(nameof(Index));
