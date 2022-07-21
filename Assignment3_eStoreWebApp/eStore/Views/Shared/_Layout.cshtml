@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using BusinessObject.Common;
+@using BusinessObject;
+@using Newtonsoft.Json;
+@using Microsoft.AspNetCore.Http;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -16,31 +20,49 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Product</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Members" asp-action="Index">Member</a>
-                        </li>
+                @{
+                            string session = @Context.Session.GetString("User");
+                            
 
-                    </ul>
-                </div>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1 justify-content-end">
+                            if (session != null)
+                            {
+                                Member member = JsonConvert.DeserializeObject<Member>(session); 
+                            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                       
+                               <ul class="navbar-nav flex-grow-1">
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                    </li>
+                                    @if (Helper.CheckRole(member))
+                                    {
+                                        
+                                    <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Product</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Members" asp-action="Index">Member</a>
+                                        </li>
+                                    }else if (member != null){
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Members" asp-action="Details" asp-route-id="@member.MemberId">Profile</a>
+                                        </li>
+                                    
+                                    }
+                                </ul>
+                             </div>
+                             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                                    <ul class="navbar-nav flex-grow-1 justify-content-end">
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="">Hello xxxx,</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Index">Logout</a>
-                        </li>
-                    </ul>
-                </div>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="">Hello xxxx,</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Logout" asp-action="Index">Logout</a>
+                                        </li>
+                                    </ul>
+                             </div>
+                           }
+                        }
             </div>
         </nav>
     </header>

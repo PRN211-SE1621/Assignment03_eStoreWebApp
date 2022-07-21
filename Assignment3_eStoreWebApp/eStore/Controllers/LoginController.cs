@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 
 using DataAccess.Repository;
 using BusinessObject;
@@ -19,15 +21,26 @@ namespace eStore.Controllers
         public IActionResult Login(string userName, string password)
         {
             bool isSuccess = false;
-            string userNameInput = userName;
-            string passwordInput = password;
+/*            string userNameInput = userName;
+            string passwordInput = password;*/
 
-            if (userNameInput == "admin@fstore.com" && passwordInput == "1")
+            Member member;
+            if (userName == "admin@fstore.com" && password == "1")
+            {
+                member = new Member()
+                {
+                    Email = userName,
+                    Password = password
+                };
+                isSuccess = true;
+            }else {           
+                member = memberRepository.CheckLogin(userName, password);
+            }
+            if (member != null)
             {
                 isSuccess = true;
             }
-
-            TempData["IsSuccess"] = isSuccess;
+            HttpContext.Session.SetString("User", JsonConvert.SerializeObject(member));          
             if (isSuccess)
             {
                 return RedirectToAction("Index", "Home");
