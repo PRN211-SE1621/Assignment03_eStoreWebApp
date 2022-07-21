@@ -1,8 +1,12 @@
-﻿@using BusinessObject
+﻿@using BusinessObject.DTO
+@using eStore.Constant
+@using eStore.Utils
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 @{
     ViewData["Title"] = "Index";
-    string role = (string)TempData["Role"];
+    LoginUser loginUser = SessionHelper.GetObjectFromJson<LoginUser>(HttpContextAccessor.HttpContext.Session, "LOGIN_USER");
 }
+
 
 <h1>Login</h1>
 <form asp-controller="Login" asp-action="Login" method="POST">
@@ -12,7 +16,7 @@
     <input id="Password" name="password" value="" type="password" /><br />
     <input type="submit" name="action" value="Login" class="btn btn-primary" />
     @{
-        if (role != null && !role.Equals("ADMIN"))
+        if (loginUser != null && loginUser.Role == Role.UNAUTHENTICATED)
         {
             <p style="color: red;">Login failed!</p>
         }

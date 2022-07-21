@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
-
+using Microsoft.AspNetCore.Session;
 using DataAccess.Repository;
 using BusinessObject;
 using Microsoft.AspNetCore.Http;
+using eStore.Constant;
+using eStore.Utils;
+using BusinessObject.DTO;
 
 namespace eStore.Controllers
 {
@@ -13,7 +16,6 @@ namespace eStore.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            TempData["Role"] = HttpContext.Session.GetString("Role");
             return View();
         }
 
@@ -21,34 +23,36 @@ namespace eStore.Controllers
         public IActionResult Login(string userName, string password)
         {
             bool isSuccess = false;
-            string userNameInput = userName;
-            string passwordInput = password;
 
-            if (userNameInput == "admin@fstore.com" && passwordInput == "1")
+            if (userName == "admin@fstore.com" && password == "admin@@")
             {
                 isSuccess = true;
+                SessionHelper.SetObjectAsJson(HttpContext.Session, "LOGIN_USER",
+                    new LoginUser(null, userName, "Admin", Role.ADMIN));
+            }
+            else if (true /* check login */ )
+            {
+
             }
 
             if (isSuccess)
             {
-                HttpContext.Session.SetString("Role", "ADMIN");
-                TempData["Role"] = HttpContext.Session.GetString("Role");
                 return RedirectToAction("Index", "Home");
             }
             else
             {
-                //TODO: Handle user role
-                HttpContext.Session.SetString("Role", "");
-                TempData["Role"] = HttpContext.Session.GetString("Role");
+                SessionHelper.SetObjectAsJson(HttpContext.Session, "LOGIN_USER",
+                    new LoginUser(null, null, null, Role.UNAUTHENTICATED));
             }
 
-            return RedirectToAction("Index", "Login");
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
+            HttpContext.Session.CommitAsync();
             return RedirectToAction("Index", "Login");
         }
     }

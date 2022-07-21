@@ -1,4 +1,6 @@
-﻿using eStore.Models;
+﻿using BusinessObject.DTO;
+using eStore.Models;
+using eStore.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -21,7 +23,6 @@ namespace eStore.Controllers
 
         public IActionResult Index()
         {
-            TempData["Role"] = HttpContext.Session.GetString("Role");
             return View();
         }
 

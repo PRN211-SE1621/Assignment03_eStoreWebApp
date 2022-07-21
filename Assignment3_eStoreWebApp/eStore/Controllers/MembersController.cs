@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using DataAccess;
+using Microsoft.AspNetCore.Http;
+using eStore.Constant;
+using BusinessObject.DTO;
+using eStore.Utils;
 
 namespace eStore.Controllers
 {
@@ -22,17 +26,26 @@ namespace eStore.Controllers
         // GET: Members
         public async Task<IActionResult> Index()
         {
+            LoginUser loginUser = SessionHelper.GetObjectFromJson<LoginUser>(HttpContext.Session, "LOGIN_USER");
+            if (loginUser == null || loginUser.Role != Role.ADMIN)
+            {
+                return RedirectToAction("Index", "Login");
+            };
             return View(await _context.Members.ToListAsync());
         }
 
         // GET: Members/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            LoginUser loginUser = SessionHelper.GetObjectFromJson<LoginUser>(HttpContext.Session, "LOGIN_USER");
+            if (loginUser == null || loginUser.Id != id)
+            {
+                return RedirectToAction("Index", "Login");
+            };
             if (id == null)
             {
                 return NotFound();
             }
-
             var member = await _context.Members
                 .FirstOrDefaultAsync(m => m.MemberId == id);
             if (member == null)
@@ -46,6 +59,11 @@ namespace eStore.Controllers
         // GET: Members/Create
         public IActionResult Create()
         {
+            LoginUser loginUser = SessionHelper.GetObjectFromJson<LoginUser>(HttpContext.Session, "LOGIN_USER");
+            if (loginUser == null || loginUser.Role != Role.ADMIN)
+            {
+                return RedirectToAction("Index", "Login");
+            };
             return View();
         }
 
@@ -56,6 +74,11 @@ namespace eStore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Email,CompanyName,City,Country,Password")] Member member)
         {
+            LoginUser loginUser = SessionHelper.GetObjectFromJson<LoginUser>(HttpContext.Session, "LOGIN_USER");
+            if (loginUser == null || loginUser.Role != Role.ADMIN)
+            {
+                return RedirectToAction("Index", "Login");
+            };
             if (ModelState.IsValid)
             {
                 _context.Add(member);
@@ -68,6 +91,11 @@ namespace eStore.Controllers
         // GET: Members/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            LoginUser loginUser = SessionHelper.GetObjectFromJson<LoginUser>(HttpContext.Session, "LOGIN_USER");
+            if (loginUser == null || loginUser.Id != id)
+            {
+                return RedirectToAction("Index", "Login");
+            };
             if (id == null)
             {
                 return NotFound();
@@ -88,6 +116,11 @@ namespace eStore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("MemberId,Email,CompanyName,City,Country,Password")] Member member)
         {
+            LoginUser loginUser = SessionHelper.GetObjectFromJson<LoginUser>(HttpContext.Session, "LOGIN_USER");
+            if (loginUser == null || loginUser.Id != id)
+            {
+                return RedirectToAction("Index", "Login");
+            };
             if (id != member.MemberId)
             {
                 return NotFound();
@@ -119,6 +152,11 @@ namespace eStore.Controllers
         // GET: Members/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            LoginUser loginUser = SessionHelper.GetObjectFromJson<LoginUser>(HttpContext.Session, "LOGIN_USER");
+            if (loginUser == null || loginUser.Role != Role.ADMIN)
+            {
+                return RedirectToAction("Index", "Login");
+            };
             if (id == null)
             {
                 return NotFound();
@@ -139,6 +177,11 @@ namespace eStore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            LoginUser loginUser = SessionHelper.GetObjectFromJson<LoginUser>(HttpContext.Session, "LOGIN_USER");
+            if (loginUser == null || loginUser.Role != Role.ADMIN)
+            {
+                return RedirectToAction("Index", "Login");
+            };
             var member = await _context.Members.FindAsync(id);
             _context.Members.Remove(member);
             await _context.SaveChangesAsync();

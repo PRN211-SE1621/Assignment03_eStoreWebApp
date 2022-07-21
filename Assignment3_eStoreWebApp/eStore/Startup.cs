@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 using DataAccess;
 using BusinessObject;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.AspNetCore.Http;
 
 namespace eStore
 {
@@ -27,7 +29,10 @@ namespace eStore
         {
             services.AddControllersWithViews();
             services.AddTransient<SalesManagementContext, SalesManagementContext>();
-            services.AddSession();
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(60);
+            });
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

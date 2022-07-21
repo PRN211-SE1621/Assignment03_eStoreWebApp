@@ -1,5 +1,9 @@
-﻿@{
-    var role = TempData["Role"];
+﻿@using BusinessObject.DTO
+@using eStore.Constant
+@using eStore.Utils
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    LoginUser loginUser = SessionHelper.GetObjectFromJson<LoginUser>(HttpContextAccessor.HttpContext.Session, "LOGIN_USER");
 }
 
 <!DOCTYPE html>
@@ -26,7 +30,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         @{
-                            if ((string)role == "ADMIN")
+                            if (loginUser != null && loginUser.Role == Role.ADMIN)
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Product</a>
@@ -39,7 +43,7 @@
                     </ul>
                 </div>
                 @{
-                    if (!string.IsNullOrEmpty((string)role))
+                    if (loginUser != null && !string.IsNullOrEmpty(loginUser.Role))
                     {
                         <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                             <ul class="navbar-nav flex-grow-1 justify-content-end">

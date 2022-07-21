@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using DataAccess;
+using BusinessObject.DTO;
+using eStore.Utils;
+using eStore.Constant;
 
 namespace eStore.Controllers
 {
@@ -22,12 +25,23 @@ namespace eStore.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
+            LoginUser loginUser = SessionHelper.GetObjectFromJson<LoginUser>(HttpContext.Session, "LOGIN_USER");
+            if (loginUser == null || loginUser.Role != Role.ADMIN)
+            {
+                return RedirectToAction("Index", "Login");
+            };
             return View(await _context.Products.ToListAsync());
         }
 
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            LoginUser loginUser = SessionHelper.GetObjectFromJson<LoginUser>(HttpContext.Session, "LOGIN_USER");
+            if (loginUser == null || loginUser.Role != Role.ADMIN)
+            {
+                return RedirectToAction("Index", "Login");
+            };
+
             if (id == null)
             {
                 return NotFound();
@@ -46,6 +60,11 @@ namespace eStore.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
+            LoginUser loginUser = SessionHelper.GetObjectFromJson<LoginUser>(HttpContext.Session, "LOGIN_USER");
+            if (loginUser == null || loginUser.Role != Role.ADMIN)
+            {
+                return RedirectToAction("Index", "Login");
+            };
             return View();
         }
 
@@ -56,6 +75,11 @@ namespace eStore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CategoryId,ProductName,Weight,UnitPrice,UnitsInStock")] Product product)
         {
+            LoginUser loginUser = SessionHelper.GetObjectFromJson<LoginUser>(HttpContext.Session, "LOGIN_USER");
+            if (loginUser == null || loginUser.Role != Role.ADMIN)
+            {
+                return RedirectToAction("Index", "Login");
+            };
             if (ModelState.IsValid)
             {
                 _context.Add(product);
@@ -68,6 +92,12 @@ namespace eStore.Controllers
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            LoginUser loginUser = SessionHelper.GetObjectFromJson<LoginUser>(HttpContext.Session, "LOGIN_USER");
+            if (loginUser == null || loginUser.Role != Role.ADMIN)
+            {
+                return RedirectToAction("Index", "Login");
+            };
+
             if (id == null)
             {
                 return NotFound();
@@ -88,6 +118,11 @@ namespace eStore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProductId,CategoryId,ProductName,Weight,UnitPrice,UnitsInStock")] Product product)
         {
+            LoginUser loginUser = SessionHelper.GetObjectFromJson<LoginUser>(HttpContext.Session, "LOGIN_USER");
+            if (loginUser == null || loginUser.Role != Role.ADMIN)
+            {
+                return RedirectToAction("Index", "Login");
+            };
             if (id != product.ProductId)
             {
                 return NotFound();
@@ -119,6 +154,11 @@ namespace eStore.Controllers
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            LoginUser loginUser = SessionHelper.GetObjectFromJson<LoginUser>(HttpContext.Session, "LOGIN_USER");
+            if (loginUser == null || loginUser.Role != Role.ADMIN)
+            {
+                return RedirectToAction("Index", "Login");
+            };
             if (id == null)
             {
                 return NotFound();
@@ -139,6 +179,12 @@ namespace eStore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            LoginUser loginUser = SessionHelper.GetObjectFromJson<LoginUser>(HttpContext.Session, "LOGIN_USER");
+            if (loginUser == null || loginUser.Role != Role.ADMIN)
+            {
+                return RedirectToAction("Index", "Login");
+            };
+
             var product = await _context.Products.FindAsync(id);
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
