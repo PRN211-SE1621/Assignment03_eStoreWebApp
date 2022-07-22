@@ -28,7 +28,7 @@ namespace DataAccess
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
 
-                optionsBuilder.UseSqlServer("Server=(local);uid=sa;pwd=1;database=SalesManagement");
+                optionsBuilder.UseSqlServer("Server=(local);uid=sa;pwd=sa;database=SalesManagement");
 
             }
         }
@@ -101,7 +101,7 @@ namespace DataAccess
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderDetails)
                     .HasForeignKey(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_OrderDetail_Order");
 
                 entity.HasOne(d => d.Product)

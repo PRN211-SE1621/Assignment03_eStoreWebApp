@@ -40,8 +40,15 @@ namespace DataAccess
 
         public Order Add(Order order)
         {
-            salesManagementContext.Orders.Add(order);
-            salesManagementContext.SaveChanges();
+            try
+            {
+                salesManagementContext.Orders.Add(order);
+                salesManagementContext.SaveChanges();
+            } catch (Exception ex)
+            {
+                salesManagementContext.Orders.Remove(order);
+                throw ex;
+            }
             return order;
         }
 

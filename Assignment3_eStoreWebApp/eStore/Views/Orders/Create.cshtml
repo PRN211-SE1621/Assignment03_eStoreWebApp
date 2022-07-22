@@ -14,6 +14,7 @@
     string requiredDate = ((DateTime?) TempData["requiredDate"])?.ToString("yyyy-MM-dd");
     string orderDate = ((DateTime?) TempData["orderDate"])?.ToString("yyyy-MM-dd");
     string shippedDate = ((DateTime?) TempData["shippedDate"])?.ToString("yyyy-MM-dd");
+    TempData.Keep();
 }
 <h1>Create</h1>
 
@@ -54,7 +55,7 @@
                 <input type="submit" name="action" value="Create" class="btn btn-primary" />
                 <input type="submit" name="action" value="Add Product" class="btn btn-primary"/>
             </div>
-            
+            <label class="text-danger">@TempData["message"]</label>
         </form>
             </div>
         <div class="col-md-8 card p-3">
@@ -77,6 +78,7 @@
                             @nameof(CartItem.UnitPrice)
                         </th>
                         <th>@nameof(CartItem.Quantity)</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -98,11 +100,15 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.Quantity)
                             </td>
+                            <td>
+                                <a asp-action="DeleteProduct" asp-route-id="@item.ProductId">Delete</a>
+                            </td>
                         </form>
                     </tr>
             }
                 </tbody>
             </table>
+            <a asp-action="ClearProduct">Clear</a>
             } else {<p> empty </p>}
         </div>
 </div>
