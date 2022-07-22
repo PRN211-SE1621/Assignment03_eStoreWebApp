@@ -14,7 +14,7 @@ using eStore.Filters;
 
 namespace eStore.Controllers
 {
-    [AdminOnlyFilter]
+   // [AdminOnlyFilter]
     public class MembersController : Controller
     {
         private readonly SalesManagementContext _context;
@@ -75,7 +75,14 @@ namespace eStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(member);
+                Member user = _context.Members.SingleOrDefault<Member>(m => m.Email.Equals(member.Email));
+                if (user != null)
+                {
+                    TempData["Message"] = "Email already existed";
+                    TempData["CreateTempData"] = JsonConvert.SerializeObject(user);
+                    return RedirectToAction("Create", "Members");
+                }
+                _context.Members.Add(member);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
