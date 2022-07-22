@@ -22,6 +22,7 @@ namespace eStore.Controllers
         // GET: Members
         public async Task<IActionResult> Index()
         {
+            _context.Database.EnsureCreated();
             return View(await _context.Members.ToListAsync());
         }
 

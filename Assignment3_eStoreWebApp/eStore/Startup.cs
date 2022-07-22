@@ -26,6 +26,8 @@ namespace eStore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddDistributedMemoryCache();
+            services.AddSession();
             services.AddTransient<SalesManagementContext, SalesManagementContext>();
         }
 
@@ -45,6 +47,8 @@ namespace eStore
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
