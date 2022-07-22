@@ -38,11 +38,10 @@ namespace eStore.Controllers
             {
                 if(memberInSession != null && Helper.CheckRole(memberInSession))
                 {
-                    Member user = JsonConvert.DeserializeObject<Member>(session);
-                    if (!Helper.CheckRole(user))
+                    if (!Helper.CheckRole(memberInSession))
                     {
-                        user = await _context.Members
-                                .FirstOrDefaultAsync(m => m.MemberId == user.MemberId);
+                        var user = await _context.Members
+                                .FirstOrDefaultAsync(m => m.MemberId == memberInSession.MemberId);
                         return View(user);
                     }
                 }
@@ -51,7 +50,7 @@ namespace eStore.Controllers
 
             var member = await _context.Members
                 .FirstOrDefaultAsync(m => m.MemberId == id);
-            if (member == null || memberInSession == null || member.MemberId != memberInSession.MemberId)
+            if (member == null || memberInSession == null || (!Helper.CheckRole(memberInSession) && member.MemberId != memberInSession.MemberId))
             {
                 return NotFound();
             }
