@@ -20,6 +20,7 @@ namespace eStore.Controllers
 
         public IActionResult Index()
         {
+
             return View();
         }
 

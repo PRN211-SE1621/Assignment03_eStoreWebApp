@@ -1,4 +1,9 @@
-﻿@model BusinessObject.Member
+﻿@using Microsoft.AspNetCore.Http;
+@using BusinessObject.Common;
+@using BusinessObject;
+@using Newtonsoft.Json;
+
+@model BusinessObject.Member
 
 @{
     ViewData["Title"] = "Details";
@@ -44,6 +49,15 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.MemberId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+   
+   | <a asp-action="Edit" asp-route-id="@Model.MemberId">Edit</a> |
+   @{
+     string session = @Context.Session.GetString("User");
+     if (session != null){
+        Member member = JsonConvert.DeserializeObject<Member>(session); 
+        if (Helper.CheckRole(member)){
+            <a asp-action="Index">Back to List</a>
+        }
+     }
+   }
 </div>
