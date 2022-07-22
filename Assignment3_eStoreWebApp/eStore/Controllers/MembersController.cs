@@ -39,6 +39,8 @@ namespace eStore.Controllers
                     Member user = JsonConvert.DeserializeObject<Member>(session);
                     if (!Helper.CheckRole(user))
                     {
+                        user = await _context.Members
+                                .FirstOrDefaultAsync(m => m.MemberId == user.MemberId);
                         return View(user);
                     }
                 }
