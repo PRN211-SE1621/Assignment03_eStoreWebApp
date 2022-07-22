@@ -131,6 +131,9 @@ namespace eStore.Controllers
 
         public ActionResult Update(int id)
         {
+            var order = orderRepository.GetById(id);
+            var listOrderDetails = orderRepository.GetOrderDetailsById(id);
+            order.OrderDetails = (ICollection<OrderDetail>) listOrderDetails;
             return View(orderRepository.GetById(id));
         }
         [HttpPost]

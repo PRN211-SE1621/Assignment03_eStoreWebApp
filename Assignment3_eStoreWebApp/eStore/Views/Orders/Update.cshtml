@@ -7,7 +7,7 @@
     ViewData["Title"] = "Update";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h1>Create</h1>
+<h1>Update</h1>
 
 <h4>Order Details</h4>
 
@@ -47,7 +47,9 @@
             </div>
             
         </form>
-        <h2>List of Products</h2>
+        </div>
+        <div class="col-md-8 card p-3">
+            <h2 style="text-align:center">List of Products</h2>
             @if(Model.OrderDetails != null && Model.OrderDetails.Count > 0)
             {
                 <table class="table">
@@ -55,6 +57,12 @@
                     <tr>
                         <th>
                             @nameof(OrderDetail.ProductId)
+                        </th>
+                        <th>
+                            @nameof(OrderDetail.Product.ProductName)
+                        </th>
+                        <th>
+                            @nameof(OrderDetail.Product.CategoryId)
                         </th>
                         <th>
                             @nameof(OrderDetail.Discount)
@@ -71,6 +79,12 @@
                         <form asp-action="AddToCart">
                             <td>
                                 @Html.DisplayFor(modelItem => item.ProductId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Product.ProductName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Product.CategoryId)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Discount)

@@ -56,7 +56,9 @@
             </div>
             
         </form>
-        <h2>List of Products</h2>
+            </div>
+        <div class="col-md-8 card p-3">
+            <h2>List of Products</h2>
             @if(cart != null && cart.Count > 0)
             {
                 <table class="table">
@@ -102,5 +104,5 @@
                 </tbody>
             </table>
             } else {<p> empty </p>}
-    </div>
+        </div>
 </div>

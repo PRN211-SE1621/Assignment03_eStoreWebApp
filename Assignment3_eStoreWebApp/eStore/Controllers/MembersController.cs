@@ -14,7 +14,6 @@ using eStore.Filters;
 
 namespace eStore.Controllers
 {
-    [AdminOnlyFilter]
     public class MembersController : Controller
     {
         private readonly SalesManagementContext _context;
@@ -24,33 +23,29 @@ namespace eStore.Controllers
             _context = context;
         }
 
+        [AdminOnlyFilter]
         // GET: Members
         public async Task<IActionResult> Index()
         {
-            _context.Database.EnsureCreated();
             return View(await _context.Members.ToListAsync());
         }
 
         // GET: Members/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            Member memberInSession = TryGetMemberFromSession();   
             if (id == null)
             {
-                string session = HttpContext.Session.GetString("User");
-                if (session != null)
+                if(memberInSession != null && Helper.CheckRole(memberInSession))
                 {
-                    Member user = JsonConvert.DeserializeObject<Member>(session);
-                    if (!Helper.CheckRole(user))
-                    {
-                        return View(user);
-                    }
+                    return View(memberInSession);
                 }
                 return NotFound();
             }
 
             var member = await _context.Members
                 .FirstOrDefaultAsync(m => m.MemberId == id);
-            if (member == null)
+            if (member == null || memberInSession == null || member.MemberId != memberInSession.MemberId)
             {
                 return NotFound();
             }
@@ -58,6 +53,7 @@ namespace eStore.Controllers
             return View(member);
         }
 
+        [AdminOnlyFilter]
         // GET: Members/Create
         public IActionResult Create()
         {
@@ -69,6 +65,7 @@ namespace eStore.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AdminOnlyFilter]
         public async Task<IActionResult> Create([Bind("Email,CompanyName,City,Country,Password")] Member member)
         {
             if (ModelState.IsValid)
@@ -135,7 +132,7 @@ namespace eStore.Controllers
                     }
                     else
                     {
-                        return RedirectToAction(nameof(Details));
+                        return RedirectToAction(nameof(Details), routeValues: new {Id=user.MemberId});
                     }
                 }
                 return RedirectToAction(nameof(Index));
@@ -143,6 +140,7 @@ namespace eStore.Controllers
             return View(member);
         }
 
+        [AdminOnlyFilter]
         // GET: Members/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -164,6 +162,7 @@ namespace eStore.Controllers
         // POST: Members/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [AdminOnlyFilter]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var member = await _context.Members.FindAsync(id);
@@ -175,6 +174,13 @@ namespace eStore.Controllers
         private bool MemberExists(int? id)
         {
             return _context.Members.Any(e => e.MemberId == id);
+        }
+
+        private Member TryGetMemberFromSession()
+        {
+            string memberJson = HttpContext.Session.GetString("User");
+            if (memberJson == null) return null;
+            return JsonConvert.DeserializeObject<Member>(memberJson);
         }
     }
 }
