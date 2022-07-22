@@ -12,7 +12,7 @@ namespace DataAccess.Repository
         public IEnumerable<Order> GetAll();
         public IEnumerable<Order> GetAllOfMember(int memberId);
         public IEnumerable<Order> GetAllIgnore();
-        public void Add(Order order);
+        public Order Add(Order order);
         public void Delete(Order order);
         public void Update(Order order);
         public Order? GetById(int id);

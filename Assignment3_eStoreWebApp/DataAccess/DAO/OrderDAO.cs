@@ -32,16 +32,17 @@ namespace DataAccess
             }
         }
 
-        public IEnumerable<Order> GetList() => salesManagementContext.Orders.Include(o => o.OrderDetails).ToList();
+        public IEnumerable<Order> GetList() => salesManagementContext.Orders.Include(o => o.OrderDetails).Include(order => order.Member).ToList();
         public IEnumerable<Order> GetListIgnore() => salesManagementContext.Orders.IgnoreAutoIncludes().ToList();
         public IEnumerable<Order> GetListByMemberId(int memberId) => salesManagementContext.Orders.Where(o => o.Member.MemberId.Equals(memberId));
 
-        public Order? GetById(int orderId) => salesManagementContext.Orders.SingleOrDefault(o => o.OrderId.Equals(orderId));
+        public Order? GetById(int orderId) => salesManagementContext.Orders.Include(order => order.OrderDetails).Include(order => order.Member).SingleOrDefault(o => o.OrderId.Equals(orderId));
 
-        public void Add(Order order)
+        public Order Add(Order order)
         {
             salesManagementContext.Orders.Add(order);
             salesManagementContext.SaveChanges();
+            return order;
         }
 
         public void Delete(Order order)
@@ -58,7 +59,7 @@ namespace DataAccess
         }
 
         public IEnumerable<Order> FilterByDate(DateTime startDate, DateTime endate)
-            => salesManagementContext.Orders.Where(o => (o.OrderDate.Date.CompareTo(startDate.Date) >= 0 && o.OrderDate.Date.CompareTo(endate.Date) <= 0)).ToList().OrderByDescending(o => o.OrderDate);
+            => salesManagementContext.Orders.Where(o => (o.OrderDate.Value.CompareTo(startDate.Date) >= 0 && o.OrderDate.Value.CompareTo(endate.Date) <= 0)).ToList().OrderByDescending(o => o.OrderDate);
 
         public IEnumerable<Order> SortDescByDate()
             => salesManagementContext.Orders.ToList().OrderByDescending(o => o.OrderDate);

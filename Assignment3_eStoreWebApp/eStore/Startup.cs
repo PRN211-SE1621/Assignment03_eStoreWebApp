@@ -32,6 +32,8 @@ namespace eStore
                 options.IdleTimeout = TimeSpan.FromMinutes(10);
             });
             services.AddControllersWithViews();
+            services.AddDistributedMemoryCache();
+            services.AddSession();
             services.AddTransient<SalesManagementContext, SalesManagementContext>();
         }
 
