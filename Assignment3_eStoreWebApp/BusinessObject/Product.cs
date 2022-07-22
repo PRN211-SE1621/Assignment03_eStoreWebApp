@@ -14,6 +14,7 @@ namespace BusinessObject
             OrderDetails = new HashSet<OrderDetail>();
         }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Display(Name = "Product ID")]
         public int ProductId { get; set; }
         public int CategoryId { get; set; }
         public string ProductName { get; set; }

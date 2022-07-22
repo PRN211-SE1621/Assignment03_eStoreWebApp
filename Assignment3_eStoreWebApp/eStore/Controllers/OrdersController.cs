@@ -104,6 +104,7 @@ namespace eStore.Controllers
                 List<CartItem> cart = JsonSerializer.Deserialize<List<CartItem>>(HttpContext.Session.GetString("Cart"));
                 foreach(CartItem pr in cart)
                 {
+                    HttpContext.Session.Remove("Cart");
                     orderDetailRepository.Add(new OrderDetail
                     {
                         OrderId = orderAfterAdd.OrderId,
@@ -112,6 +113,7 @@ namespace eStore.Controllers
                         Discount = pr.Discount,
                         UnitPrice = pr.UnitPrice
                     });
+                    
                 }
             } else if(action.Equals("Add Product"))
             {
@@ -154,7 +156,6 @@ namespace eStore.Controllers
         }
         public ActionResult Delete(int id)
         {
-            //Binh do here
             return null;
         }
     }
