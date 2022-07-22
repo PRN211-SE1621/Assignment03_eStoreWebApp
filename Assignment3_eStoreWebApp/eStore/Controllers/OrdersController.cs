@@ -104,6 +104,7 @@ namespace eStore.Controllers
                 List<CartItem> cart = JsonSerializer.Deserialize<List<CartItem>>(HttpContext.Session.GetString("Cart"));
                 foreach(CartItem pr in cart)
                 {
+                    HttpContext.Session.Remove("Cart");
                     orderDetailRepository.Add(new OrderDetail
                     {
                         OrderId = orderAfterAdd.OrderId,
@@ -112,6 +113,7 @@ namespace eStore.Controllers
                         Discount = pr.Discount,
                         UnitPrice = pr.UnitPrice
                     });
+                    
                 }
             } else if(action.Equals("Add Product"))
             {
@@ -131,6 +133,9 @@ namespace eStore.Controllers
 
         public ActionResult Update(int id)
         {
+            var order = orderRepository.GetById(id);
+            var listOrderDetails = orderRepository.GetOrderDetailsById(id);
+            order.OrderDetails = (ICollection<OrderDetail>) listOrderDetails;
             return View(orderRepository.GetById(id));
         }
         [HttpPost]
@@ -151,8 +156,23 @@ namespace eStore.Controllers
         }
         public ActionResult Delete(int id)
         {
-            //Binh do here
+<<<<<<< HEAD
+=======
+            var order = orderRepository.GetById(id);
+            orderDetailRepository.Delete(order);
+>>>>>>> 3a83761ec58b0a958dedbbcd2974d0fc370dbfeb
             return null;
+        }
+        [HttpPost]
+        public ActionResult Delete(int id, [Bind(nameof(Order.MemberId), nameof(Order.OrderDate), nameof(Order.RequiredDate), nameof(Order.ShippedDate), nameof(Order.Freight))] Order order)
+        {
+            if (TryValidateModel(nameof(Order)))
+            {
+                var orderDelete = orderRepository.GetById(id);
+                orderRepository.Delete(orderDelete);
+                return RedirectToAction("Index");
+            }
+            return View(orderRepository.GetById(id));
         }
     }
 }

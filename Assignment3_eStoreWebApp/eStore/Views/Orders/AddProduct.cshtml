@@ -5,6 +5,7 @@
     string message = (string) TempData["message"];
 }
 
+<h3>Please add product to cart...</h3>
 <table class="table">
     <thead>
         <tr>
@@ -61,8 +62,10 @@
 <a asp-action="Create">Back to create</a>
     @if(string.IsNullOrEmpty(message))
     {
-        <h3></h3>
+        <h3>...</h3>
     } else
     {
-        <h3>@message</h3>
+        <script>
+            alert("@message");
+        </script>
     }

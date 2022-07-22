@@ -29,5 +29,6 @@ namespace DataAccess.Repository
 
         public IEnumerable<Product> SearchProductByIdAndNameAndUnitPriceAndUnitInStock(string searchId, string searchName, string searchUnitPriceMin, string searchUnitPriceMax , string searchUnitInStockMin, string searchUnitInStockMax);
 
+
     }
 }
