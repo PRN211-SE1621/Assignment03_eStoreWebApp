@@ -145,5 +145,10 @@ namespace eStore.Controllers
             }    
             return View(orderRepository.GetById(id));
         }
+        public ActionResult Delete(int id)
+        {
+            //Binh do here
+            return null;
+        }
     }
 }
