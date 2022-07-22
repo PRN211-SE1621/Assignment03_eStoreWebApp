@@ -11,5 +11,6 @@ namespace DataAccess.Repository
     {
         public void Add(OrderDetail orderDetail);
         public void Delete(OrderDetail orderDetail);
+        
      }
 }
