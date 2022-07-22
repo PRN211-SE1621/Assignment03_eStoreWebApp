@@ -48,6 +48,8 @@ namespace DataAccess
             salesManagementContext.OrderDetails.Remove(od);
             salesManagementContext.SaveChanges();
         }
+
+       
     }
 
 
