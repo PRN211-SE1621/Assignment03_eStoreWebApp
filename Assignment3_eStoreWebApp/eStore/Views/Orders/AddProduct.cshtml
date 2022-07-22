@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    string message = (string) TempData["message"];
+    string message = (string)TempData["message"];
 }
 
 <h3>Please add product to cart...</h3>
@@ -27,26 +27,25 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <form asp-action="AddToCart" method="POST">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <form asp-action="AddToCart" method="POST">
                 <td>
-                    @Html.DisplayFor(modelItem => item.CategoryId)
+                        @Html.DisplayFor(modelItem => item.CategoryId)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ProductName)
+                        @Html.DisplayFor(modelItem => item.ProductName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Weight)
+                        @Html.DisplayFor(modelItem => item.Weight)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.UnitPrice)
+                        @Html.DisplayFor(modelItem => item.UnitPrice)
                 </td>
                 <td>
-
-                        <input type="number" name="quantity" id="quantity" value="" />
-                        <input type="hidden" name="productId" id="productId" value=@item.ProductId />
-                      
+                    <input type="number" name="quantity" id="quantity" value="" />
+                    <input type="hidden" name="productId" id="productId" value=@item.ProductId />
                 </td>
                 <td>
                     <input type="text" name="discount" id="discount" value="" />
@@ -54,18 +53,19 @@
                 <td>
                     <button type="submit" name="action" value="AddToCart" class="btn btn-primary">Add</button>
                 </td>
-            </form>
-        </tr>
-}
+                </form>
+            </tr>
+        }
     </tbody>
 </table>
 <a asp-action="Create">Back to create</a>
-    @if(string.IsNullOrEmpty(message))
-    {
-        <h3>...</h3>
-    } else
-    {
-        <script>
-            alert("@message");
-        </script>
-    }
+@if (string.IsNullOrEmpty(message))
+{
+    <h3>...</h3>
+}
+else
+{
+    <script>
+        alert("@message");
+    </script>
+}

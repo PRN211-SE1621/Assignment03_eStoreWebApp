@@ -11,45 +11,43 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using BusinessObject.Common;
 using eStore.Filters;
+using DataAccess.Repository;
 
 namespace eStore.Controllers
 {
     public class MembersController : Controller
     {
-        private readonly SalesManagementContext _context;
+        IMemberRepository memberRepository;
 
-        public MembersController(SalesManagementContext context)
+        public MembersController()
         {
-            _context = context;
+            memberRepository = new MemberRepository();
         }
 
         [AdminOnlyFilter]
         // GET: Members
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Members.ToListAsync());
+            return View(memberRepository.GetAllMembers());
         }
 
         // GET: Members/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            Member memberInSession = TryGetMemberFromSession();   
+            Member memberInSession = TryGetMemberFromSession();
             if (id == null)
             {
-                if(memberInSession != null && Helper.CheckRole(memberInSession))
+                if (memberInSession != null && Helper.CheckRole(memberInSession))
                 {
                     if (!Helper.CheckRole(memberInSession))
                     {
-                        var user = await _context.Members
-                                .FirstOrDefaultAsync(m => m.MemberId == memberInSession.MemberId);
+                        var user = memberRepository.GetMemberById(memberInSession.MemberId);
                         return View(user);
                     }
                 }
                 return NotFound();
             }
-
-            var member = await _context.Members
-                .FirstOrDefaultAsync(m => m.MemberId == id);
+            var member = memberRepository.GetMemberById((int)id);
             if (member == null || memberInSession == null || (!Helper.CheckRole(memberInSession) && member.MemberId != memberInSession.MemberId))
             {
                 return NotFound();
@@ -75,15 +73,14 @@ namespace eStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                Member user = _context.Members.SingleOrDefault<Member>(m => m.Email.Equals(member.Email));
+                Member user = memberRepository.GetMemberByEmail(member.Email);
                 if (user != null)
                 {
                     TempData["Message"] = "Email already existed";
                     TempData["CreateTempData"] = JsonConvert.SerializeObject(user);
                     return RedirectToAction("Create", "Members");
                 }
-                _context.Members.Add(member);
-                await _context.SaveChangesAsync();
+                memberRepository.CreateMember(member);
                 return RedirectToAction(nameof(Index));
             }
             return View(member);
@@ -97,7 +94,7 @@ namespace eStore.Controllers
                 return NotFound();
             }
 
-            var member = await _context.Members.FindAsync(id);
+            var member = memberRepository.GetMemberById((int)id);
             if (member == null)
             {
                 return NotFound();
@@ -121,8 +118,7 @@ namespace eStore.Controllers
             {
                 try
                 {
-                    _context.Update(member);
-                    await _context.SaveChangesAsync();
+                    memberRepository.UpdateMember(memberRepository.GetMemberById((int)id));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -139,12 +135,13 @@ namespace eStore.Controllers
                 if (session != null)
                 {
                     Member user = JsonConvert.DeserializeObject<Member>(session);
-                    if (Helper.CheckRole(user)){
+                    if (Helper.CheckRole(user))
+                    {
                         return RedirectToAction(nameof(Index));
                     }
                     else
                     {
-                        return RedirectToAction(nameof(Details), routeValues: new {Id=user.MemberId});
+                        return RedirectToAction(nameof(Details), routeValues: new { Id = user.MemberId });
                     }
                 }
                 return RedirectToAction(nameof(Index));
@@ -161,8 +158,7 @@ namespace eStore.Controllers
                 return NotFound();
             }
 
-            var member = await _context.Members
-                .FirstOrDefaultAsync(m => m.MemberId == id);
+            var member = memberRepository.GetMemberById((int)id);
             if (member == null)
             {
                 return NotFound();
@@ -177,15 +173,14 @@ namespace eStore.Controllers
         [AdminOnlyFilter]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var member = await _context.Members.FindAsync(id);
-            _context.Members.Remove(member);
-            await _context.SaveChangesAsync();
+            var member = memberRepository.GetMemberById((int)id);
+            memberRepository.DeleteMember(member);
             return RedirectToAction(nameof(Index));
         }
 
         private bool MemberExists(int? id)
         {
-            return _context.Members.Any(e => e.MemberId == id);
+            return memberRepository.GetMemberById((int)id) != null;
         }
 
         private Member TryGetMemberFromSession()

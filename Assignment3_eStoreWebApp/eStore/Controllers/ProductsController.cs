@@ -8,23 +8,23 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using DataAccess;
 using eStore.Filters;
+using DataAccess.Repository;
 
 namespace eStore.Controllers
 {
     [AdminOnlyFilter]
     public class ProductsController : Controller
     {
-        private readonly SalesManagementContext _context;
-
-        public ProductsController(SalesManagementContext context)
+        IProductRepository productRepository;
+        public ProductsController()
         {
-            _context = context;
+            productRepository = new ProductRepository();
         }
 
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Products.ToListAsync());
+            return View(productRepository.GetAll());
         }
 
         // GET: Products/Details/5
@@ -35,8 +35,7 @@ namespace eStore.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.ProductId == id);
+            var product = productRepository.GetProductById((int)id);
             if (product == null)
             {
                 return NotFound();
@@ -60,8 +59,7 @@ namespace eStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
+                productRepository.CreateProduct(product);
                 return RedirectToAction(nameof(Index));
             }
             return View(product);
@@ -75,7 +73,7 @@ namespace eStore.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products.FindAsync(id);
+            var product = productRepository.GetProductById((int)id);
             if (product == null)
             {
                 return NotFound();
@@ -99,8 +97,7 @@ namespace eStore.Controllers
             {
                 try
                 {
-                    _context.Update(product);
-                    await _context.SaveChangesAsync();
+                    productRepository.UpdateProduct(product);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -126,8 +123,7 @@ namespace eStore.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .FirstOrDefaultAsync(m => m.ProductId == id);
+            var product = productRepository.GetProductById((int)id);
             if (product == null)
             {
                 return NotFound();
@@ -141,15 +137,13 @@ namespace eStore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
+            productRepository.DeleteProduct(id);
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProductExists(int? id)
         {
-            return _context.Products.Any(e => e.ProductId == id);
+            return productRepository.GetProductById((int)id) != null;
         }
     }
 }
