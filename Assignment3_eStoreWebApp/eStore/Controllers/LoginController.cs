@@ -40,13 +40,14 @@ namespace eStore.Controllers
             if (member != null)
             {
                 isSuccess = true;
+                HttpContext.Session.SetString("User", JsonConvert.SerializeObject(member));
             }
-            HttpContext.Session.SetString("User", JsonConvert.SerializeObject(member));          
+          
             if (isSuccess)
             {
                 return RedirectToAction("Index", "Home");
             }
-
+            TempData["IsSuccess"] = false;
             return RedirectToAction("Index", "Login");
         }
     }
