@@ -7,15 +7,19 @@ using System;
 
 using DataAccess.Repository;
 using BusinessObject;
+using eStore.Filters;
+
 
 namespace eStore.Controllers
 {
+    [AdminOnlyFilter]
     public class OrdersController : Controller
     {
         IOrderRepository orderRepository;
         IOrderDetailRepository orderDetailRepository;
         IProductRepository productRepository;
 
+        
         public OrdersController()
         {
             orderRepository = new OrderRepository();
