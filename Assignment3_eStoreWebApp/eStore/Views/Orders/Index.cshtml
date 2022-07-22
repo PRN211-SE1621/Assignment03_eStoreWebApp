@@ -1,0 +1,70 @@
+﻿@model IEnumerable<BusinessObject.Order>
+
+@{
+    ViewData["Title"] = "Order Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Order Management</h1>
+<p>
+    <a asp-action="Create">Create Order</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Member.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Member.Country)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Freight)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RequiredDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShippedDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Member.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Member.Country)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Freight)
+            </td>
+            <td>
+                @item.OrderDate.Value.ToString("dd/MM/yyyy")
+            </td>
+            <td>
+                @item.RequiredDate.Value.ToString("dd/MM/yyyy")
+            </td>
+            <td>
+                @item.ShippedDate.Value.ToString("dd/MM/yyyy")
+            </td>
+            <td>
+                <a asp-action="Update" asp-route-id="@item.OrderId">Update</a> |
+                <a asp-action="Delete" asp-route-id="@item.OrderId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

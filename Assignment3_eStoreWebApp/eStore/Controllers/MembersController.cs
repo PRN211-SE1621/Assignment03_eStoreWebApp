@@ -10,9 +10,11 @@ using DataAccess;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using BusinessObject.Common;
+using eStore.Filters;
 
 namespace eStore.Controllers
 {
+    [AdminOnlyFilter]
     public class MembersController : Controller
     {
         private readonly SalesManagementContext _context;
@@ -25,6 +27,7 @@ namespace eStore.Controllers
         // GET: Members
         public async Task<IActionResult> Index()
         {
+            _context.Database.EnsureCreated();
             return View(await _context.Members.ToListAsync());
         }
 

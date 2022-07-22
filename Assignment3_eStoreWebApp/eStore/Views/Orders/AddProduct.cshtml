@@ -1,0 +1,68 @@
+﻿@model IEnumerable<BusinessObject.Product>
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string message = (string) TempData["message"];
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Weight)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnitPrice)
+            </th>
+            <th>Quantity</th>
+            <th>Discount</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <form asp-action="AddToCart" method="POST">
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Weight)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitPrice)
+                </td>
+                <td>
+
+                        <input type="number" name="quantity" id="quantity" value="" />
+                        <input type="hidden" name="productId" id="productId" value=@item.ProductId />
+                      
+                </td>
+                <td>
+                    <input type="text" name="discount" id="discount" value="" />
+                </td>
+                <td>
+                    <button type="submit" name="action" value="AddToCart" class="btn btn-primary">Add</button>
+                </td>
+            </form>
+        </tr>
+}
+    </tbody>
+</table>
+<a asp-action="Create">Back to create</a>
+    @if(string.IsNullOrEmpty(message))
+    {
+        <h3></h3>
+    } else
+    {
+        <h3>@message</h3>
+    }

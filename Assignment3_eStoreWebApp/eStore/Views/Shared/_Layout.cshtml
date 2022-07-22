@@ -22,7 +22,6 @@
                 </button>
                 @{
                             string session = @Context.Session.GetString("User");
-                            
 
                             if (session != null)
                             {
@@ -42,11 +41,17 @@
                                         <li class="nav-item">
                                             <a class="nav-link text-dark" asp-area="" asp-controller="Members" asp-action="Index">Member</a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Orders" asp-action="Index">Order</a>
+                                        </li>
                                     }else if (member != null){
+                                        
                                         <li class="nav-item">
                                             <a class="nav-link text-dark" asp-area="" asp-controller="Members" asp-action="Details" asp-route-id="@member.MemberId">Profile</a>
                                         </li>
-                                    
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="MemberOrders" asp-action="Index" asp-route-id="@member.MemberId">Orders</a>
+                                        </li>
                                     }
                                 </ul>
                              </div>

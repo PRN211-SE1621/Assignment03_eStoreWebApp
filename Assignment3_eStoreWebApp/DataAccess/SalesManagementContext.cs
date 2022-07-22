@@ -27,7 +27,9 @@ namespace DataAccess
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=(local);uid=sa;pwd=1234567890;database=SalesManagement");
+
+                optionsBuilder.UseSqlServer("Server=(local);uid=sa;pwd=sa;database=SalesManagement");
+
             }
         }
 
@@ -39,7 +41,7 @@ namespace DataAccess
             {
                 entity.ToTable("Member");
 
-                entity.Property(e => e.MemberId).ValueGeneratedNever();
+                entity.Property(e => e.MemberId).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.City)
                     .IsRequired()
@@ -71,7 +73,7 @@ namespace DataAccess
             {
                 entity.ToTable("Order");
 
-                entity.Property(e => e.OrderId).ValueGeneratedNever();
+                entity.Property(e => e.OrderId).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.Freight).HasColumnType("money");
 
@@ -113,7 +115,7 @@ namespace DataAccess
             {
                 entity.ToTable("Product");
 
-                entity.Property(e => e.ProductId).ValueGeneratedNever();
+                entity.Property(e => e.ProductId).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.ProductName)
                     .IsRequired()
