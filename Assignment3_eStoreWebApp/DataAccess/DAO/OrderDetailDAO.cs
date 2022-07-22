@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess
 {
@@ -31,7 +32,12 @@ namespace DataAccess
             }
         }
 
-        public IEnumerable<OrderDetail> GetListByOrderId(int orderId) => salesManagementContext.OrderDetails.Where(o => o.OrderId.Equals(orderId)).ToList();
+
+
+        public IEnumerable<OrderDetail> GetListByOrderId(int orderId)
+            =>salesManagementContext.OrderDetails.Where(o => o.OrderId.Equals(orderId)).Include(o => o.Product).ToList();
+
+
         public void Add(OrderDetail od)
         {
             salesManagementContext.OrderDetails.Add(od);
@@ -43,4 +49,6 @@ namespace DataAccess
             salesManagementContext.SaveChanges();
         }
     }
+
+
 }
