@@ -124,5 +124,26 @@ namespace eStore.Controllers
             }    
             return RedirectToAction("Index");
         }
+
+        public ActionResult Update(int id)
+        {
+            return View(orderRepository.GetById(id));
+        }
+        [HttpPost]
+        public ActionResult Update(int id, [Bind(nameof(Order.MemberId), nameof(Order.OrderDate), nameof(Order.RequiredDate), nameof(Order.ShippedDate), nameof(Order.Freight))] Order order)
+        {
+            if(TryValidateModel(nameof(Order)))
+            {
+                var orderUpdate = orderRepository.GetById(id);
+                orderUpdate.MemberId = order.MemberId;
+                orderUpdate.OrderDate = order.OrderDate;
+                orderUpdate.RequiredDate = order.RequiredDate;
+                orderUpdate.ShippedDate = order.ShippedDate;
+                orderUpdate.Freight = order.Freight;
+                orderRepository.Update(orderUpdate);
+                return RedirectToAction("Index");
+            }    
+            return View(orderRepository.GetById(id));
+        }
     }
 }

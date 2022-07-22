@@ -65,6 +65,6 @@ namespace DataAccess
             => salesManagementContext.Orders.ToList().OrderByDescending(o => o.OrderDate);
 
         public IEnumerable<Order> GetByMemberId(int memberId) => salesManagementContext.Orders.Where(o => o.MemberId == memberId).Include(o => o.OrderDetails).ToList();
-
+        public IEnumerable<OrderDetail> GetOrderDetails(int orderId) => salesManagementContext.OrderDetails.Where(orderDetail => orderDetail.OrderId == orderId).Include(orderDetail => orderDetail.Product);
     }
 }
