@@ -5,8 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Product Management</h1>
-
+<h1>Order Management</h1>
 <p>
     <a asp-action="Create">Create Order</a>
 </p>
@@ -62,8 +61,7 @@
                 @item.ShippedDate.Value.ToString("dd/MM/yyyy")
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.OrderId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.OrderId">Details</a> |
+                <a asp-action="Update" asp-route-id="@item.OrderId">Update</a> |
                 <a asp-action="Delete" asp-route-id="@item.OrderId">Delete</a>
             </td>
         </tr>

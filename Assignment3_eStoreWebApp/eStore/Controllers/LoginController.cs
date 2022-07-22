@@ -32,6 +32,7 @@ namespace eStore.Controllers
                     Email = userName,
                     Password = password
                 };
+                HttpContext.Session.SetString("Role", "ADMIN");
                 isSuccess = true;
             }else {           
                 member = memberRepository.CheckLogin(userName, password);

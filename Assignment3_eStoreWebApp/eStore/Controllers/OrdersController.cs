@@ -7,15 +7,19 @@ using System;
 
 using DataAccess.Repository;
 using BusinessObject;
+using eStore.Filters;
+
 
 namespace eStore.Controllers
 {
+    [AdminOnlyFilter]
     public class OrdersController : Controller
     {
         IOrderRepository orderRepository;
         IOrderDetailRepository orderDetailRepository;
         IProductRepository productRepository;
 
+        
         public OrdersController()
         {
             orderRepository = new OrderRepository();
@@ -123,6 +127,32 @@ namespace eStore.Controllers
                 return RedirectToAction("AddProduct");
             }    
             return RedirectToAction("Index");
+        }
+
+        public ActionResult Update(int id)
+        {
+            return View(orderRepository.GetById(id));
+        }
+        [HttpPost]
+        public ActionResult Update(int id, [Bind(nameof(Order.MemberId), nameof(Order.OrderDate), nameof(Order.RequiredDate), nameof(Order.ShippedDate), nameof(Order.Freight))] Order order)
+        {
+            if(TryValidateModel(nameof(Order)))
+            {
+                var orderUpdate = orderRepository.GetById(id);
+                orderUpdate.MemberId = order.MemberId;
+                orderUpdate.OrderDate = order.OrderDate;
+                orderUpdate.RequiredDate = order.RequiredDate;
+                orderUpdate.ShippedDate = order.ShippedDate;
+                orderUpdate.Freight = order.Freight;
+                orderRepository.Update(orderUpdate);
+                return RedirectToAction("Index");
+            }    
+            return View(orderRepository.GetById(id));
+        }
+        public ActionResult Delete(int id)
+        {
+            //Binh do here
+            return null;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace eStore.Controllers
     {
         public IActionResult Index()
         {
-            HttpContext.Session.Remove("User");
+            HttpContext.Session.Clear();
             return RedirectToAction("Index", "Login");
         }
     }

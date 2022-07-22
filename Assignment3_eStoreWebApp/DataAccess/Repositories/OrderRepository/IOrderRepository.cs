@@ -19,5 +19,6 @@ namespace DataAccess.Repository
         public IEnumerable<OrderDetail> GetOrderDetailsById(int id);
         public IEnumerable<Order> FilterByDate(DateTime start, DateTime end);
         public IEnumerable<Order> SortDescByDate();
+        public IEnumerable<OrderDetail> GetOrderDetails(int orderId);
     }
 }

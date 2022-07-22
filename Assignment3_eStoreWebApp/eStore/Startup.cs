@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 using DataAccess;
 using BusinessObject;
+using eStore.Filters;
 
 namespace eStore
 {

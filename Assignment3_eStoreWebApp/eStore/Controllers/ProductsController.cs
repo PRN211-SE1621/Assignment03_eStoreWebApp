@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using DataAccess;
+using eStore.Filters;
 
 namespace eStore.Controllers
 {
+    [AdminOnlyFilter]
     public class ProductsController : Controller
     {
         private readonly SalesManagementContext _context;
