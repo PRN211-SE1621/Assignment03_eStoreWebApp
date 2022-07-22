@@ -156,7 +156,23 @@ namespace eStore.Controllers
         }
         public ActionResult Delete(int id)
         {
+<<<<<<< HEAD
+=======
+            var order = orderRepository.GetById(id);
+            orderDetailRepository.Delete(order);
+>>>>>>> 3a83761ec58b0a958dedbbcd2974d0fc370dbfeb
             return null;
+        }
+        [HttpPost]
+        public ActionResult Delete(int id, [Bind(nameof(Order.MemberId), nameof(Order.OrderDate), nameof(Order.RequiredDate), nameof(Order.ShippedDate), nameof(Order.Freight))] Order order)
+        {
+            if (TryValidateModel(nameof(Order)))
+            {
+                var orderDelete = orderRepository.GetById(id);
+                orderRepository.Delete(orderDelete);
+                return RedirectToAction("Index");
+            }
+            return View(orderRepository.GetById(id));
         }
     }
 }
