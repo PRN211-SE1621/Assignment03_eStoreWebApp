@@ -38,7 +38,13 @@ namespace eStore.Controllers
             {
                 if(memberInSession != null && Helper.CheckRole(memberInSession))
                 {
-                    return View(memberInSession);
+                    Member user = JsonConvert.DeserializeObject<Member>(session);
+                    if (!Helper.CheckRole(user))
+                    {
+                        user = await _context.Members
+                                .FirstOrDefaultAsync(m => m.MemberId == user.MemberId);
+                        return View(user);
+                    }
                 }
                 return NotFound();
             }
@@ -70,7 +76,14 @@ namespace eStore.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(member);
+                Member user = _context.Members.SingleOrDefault<Member>(m => m.Email.Equals(member.Email));
+                if (user != null)
+                {
+                    TempData["Message"] = "Email already existed";
+                    TempData["CreateTempData"] = JsonConvert.SerializeObject(user);
+                    return RedirectToAction("Create", "Members");
+                }
+                _context.Members.Add(member);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
