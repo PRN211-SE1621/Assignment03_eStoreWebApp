@@ -57,7 +57,6 @@ namespace DataAccess
             salesManagementContext = new SalesManagementContext();
             salesManagementContext.Entry<Product>(updatedProductInfo).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             salesManagementContext.SaveChanges(true);
-            //salesManagementContext.Products.Update(updatedProductInfo);
         }
         public IEnumerable<Product> SearchByName(string searchKey) 
             => salesManagementContext.Products.Where(p => p.ProductName.ToUpper().Contains(searchKey)).ToList();

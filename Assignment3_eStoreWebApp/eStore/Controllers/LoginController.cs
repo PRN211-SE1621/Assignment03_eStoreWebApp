@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Http;
 
 using DataAccess.Repository;
 using BusinessObject;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace eStore.Controllers
 {
@@ -21,11 +23,9 @@ namespace eStore.Controllers
         public IActionResult Login(string userName, string password)
         {
             bool isSuccess = false;
-/*            string userNameInput = userName;
-            string passwordInput = password;*/
 
             Member member;
-            if (userName == "admin@fstore.com" && password == "1")
+            if (this.IsDefaultAdmin(userName, password))
             {
                 member = new Member()
                 {
@@ -49,6 +49,19 @@ namespace eStore.Controllers
             }
             TempData["IsSuccess"] = false;
             return RedirectToAction("Index", "Login");
+        }
+
+        private bool IsDefaultAdmin(string email, string password)
+        {
+            IConfiguration config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", true, true)
+                .Build();
+            if (email == config["AdminAccount:Email"] && password == config["AdminAccount:Password"])
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
