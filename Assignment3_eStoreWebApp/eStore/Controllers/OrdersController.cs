@@ -215,13 +215,32 @@ namespace eStore.Controllers
             var cartItem = cart.Where(item => item.ProductId == id).FirstOrDefault();
             if(cartItem != null)
             {
-                cart.Remove(cartItem);
+                RemoveCartItemAndReserveQuantity(cartItem, cart);
             }
-            SetCart(cart);
             return RedirectToAction("Create");
+        }
+        private void RemoveCartItemAndReserveQuantity(CartItem cartItem, List<CartItem> cart)
+        {
+            ReserveQuantityAfterDeleteItem(cartItem);
+            cart.Remove(cartItem);
+            SetCart(cart);
+        }
+        private void ReserveQuantityAfterDeleteItem(CartItem cartItem)
+        {
+            var product = productRepository.GetProductById(cartItem.ProductId);
+            product.UnitsInStock += cartItem.Quantity;
+            productRepository.UpdateProduct(product);
         }
         public IActionResult ClearProduct()
         {
+            var cart = GetCart();
+            if(cart != null)
+            {
+                foreach(CartItem item in cart)
+                {
+                    ReserveQuantityAfterDeleteItem(item);
+                }    
+            }
             SetCart(new List<CartItem>());
             return RedirectToAction("Create");
         }

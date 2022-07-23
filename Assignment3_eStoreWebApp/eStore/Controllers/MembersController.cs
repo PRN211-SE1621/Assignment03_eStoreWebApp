@@ -118,7 +118,19 @@ namespace eStore.Controllers
             {
                 try
                 {
-                    memberRepository.UpdateMember(memberRepository.GetMemberById((int)id));
+                    Member m = memberRepository.GetMemberById(id);
+                    if(m!= null)
+                    {
+                        m.Email = member.Email;
+                        m.City = member.City;
+                        m.CompanyName = member.CompanyName;
+                        m.Country = member.Country;
+                        if(member.Password != null && member.Password != "")
+                        {
+                            m.Password = member.Password;
+                        }
+                    }    
+                    memberRepository.UpdateMember(m);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
