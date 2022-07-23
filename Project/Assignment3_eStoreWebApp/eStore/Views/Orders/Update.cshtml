@@ -1,0 +1,106 @@
+﻿@using BusinessObject
+@using Microsoft.AspNetCore.Http
+@using System.Text.Json;
+@model Order
+
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>Update</h1>
+
+<h4>Order Details</h4>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Update">
+            <div class="form-group">
+                <label asp-for="MemberId" class="control-label"></label>
+                <input asp-for="MemberId" class="form-control" value="@Model.MemberId" />
+                <span asp-validation-for="MemberId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OrderDate" class="control-label"></label>
+                <input asp-for="OrderDate" class="form-control" type="date" value="@Model.OrderDate.Value.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="OrderDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RequiredDate" class="control-label"></label>
+                <input asp-for="RequiredDate" class="form-control" type="date" value="@Model.RequiredDate.Value.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="RequiredDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShippedDate" class="control-label"></label>
+                <input asp-for="ShippedDate" class="form-control" type="date" value="@Model.ShippedDate.Value.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="ShippedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Freight" class="control-label"></label>
+                <input asp-for="Freight" class="form-control" value="@Model.Freight" />
+                <span asp-validation-for=
+                "Freight" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" name="action" value="Update" class="btn btn-primary" />
+            </div>
+            
+        </form>
+        </div>
+        <div class="col-md-8 card p-3">
+            <h2 style="text-align:center">List of Products</h2>
+            @if(Model.OrderDetails != null && Model.OrderDetails.Count > 0)
+            {
+                <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @nameof(OrderDetail.ProductId)
+                        </th>
+                        <th>
+                            @nameof(OrderDetail.Product.ProductName)
+                        </th>
+                        <th>
+                            @nameof(OrderDetail.Product.CategoryId)
+                        </th>
+                        <th>
+                            @nameof(OrderDetail.Discount)
+                        </th>
+                        <th>
+                            @nameof(OrderDetail.UnitPrice)
+                        </th>
+                        <th>@nameof(OrderDetail.Quantity)</th>
+                    </tr>
+                </thead>
+                <tbody>
+            @foreach (var item in Model.OrderDetails) {
+                    <tr>
+                        <form asp-action="AddToCart">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProductId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Product.ProductName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Product.CategoryId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Discount)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UnitPrice)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Quantity)
+                            </td>
+                        </form>
+                    </tr>
+            }
+                </tbody>
+            </table>
+            } else {<p> empty </p>}
+    </div>
+</div>
+<label class="text-danger">@TempData["message"]</label>

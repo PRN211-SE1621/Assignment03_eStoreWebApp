@@ -1,0 +1,29 @@
+﻿@using BusinessObject
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="card">
+<h3>Login</h3>
+
+    <form asp-controller="Login" asp-action="Login" method="POST" class="col-lg-5 col-md-8">
+    <div class="row">
+        <h5 class="col-sm-4">Email:</h5>
+        <input class="col-sm-8" id="UserName" name="userName" value="" type="text" /><br />
+    </div>
+    <div class="row" style="margin-top: 4px; margin-bottom:4px">
+        <h5 class="col-sm-4">Password:</h5>
+        <input class="col-sm-8" id="Password" name="password" value="" type="password" /><br />
+    </div>
+    <div class="row" style="display: flex; justify-content: end;">
+        <input type="submit" name="action" value="Login" class="btn btn-primary" />
+    </div>
+    @{
+        if (TempData["IsSuccess"] != null && !(Boolean)TempData["IsSuccess"])
+        {
+            <p style="color: red;">Email or password is not correct!</p>
+        }
+    }
+</form>
+</div>
+
